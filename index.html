@@ -175,7 +175,7 @@
   .hl-terms .body { white-space: pre-wrap; line-height: 1.9; }
   .hl-stamp { margin: 14mm 0 0 6mm; min-height: 30mm; }
   .hl-stamp img { max-height: 34mm; }
-  .hl-sign { display: flex; justify-content: space-between; align-items: flex-end; gap: 20mm; margin-top: 8mm; padding: 0 2mm; }
+  .hl-sign { display: flex; justify-content: space-between; align-items: flex-start; gap: 20mm; margin-top: 8mm; padding: 0 2mm; }
   .hl-sign .side { font-size: 10pt; }
   .hl-sign .side .line { border-top: 1.5px solid #000; min-width: 62mm; margin-bottom: 1.5mm; }
   .hl-sign .side small { font-size: 8.5pt; color: #333; }
@@ -256,6 +256,8 @@
     @page { size: A4; margin: 0; }
     body { background: #fff; }
     header.appbar, .panel, .toast { display: none !important; }
+    /* 保險：列印時隱藏任何非本工具的注入元素（瀏覽器擴充、預覽工具標記等） */
+    body > *:not(main) { display: none !important; }
     main, .view.active { display: block !important; }
     .preview-wrap { height: auto; overflow: visible; padding: 0; display: block; }
     .paper {
