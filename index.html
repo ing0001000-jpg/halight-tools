@@ -173,11 +173,11 @@
   .hl-terms td { border: 1px solid #000; padding: 3mm 4mm; }
   .hl-terms .head { background: var(--cell-grey); font-weight: 700; text-align: center; padding: 1.8mm 0; }
   .hl-terms .body { white-space: pre-wrap; line-height: 1.9; }
-  .hl-stamp { margin: 14mm 0 0 6mm; min-height: 30mm; }
-  .hl-stamp img { max-height: 34mm; }
-  .hl-sign { display: flex; justify-content: space-between; align-items: flex-start; gap: 20mm; margin-top: 8mm; padding: 0 2mm; }
-  .hl-sign .side { font-size: 10pt; }
-  .hl-sign .side .line { border-top: 1.5px solid #000; min-width: 62mm; margin-bottom: 1.5mm; }
+  .hl-sign { display: flex; justify-content: space-between; align-items: flex-start; gap: 20mm; margin-top: 12mm; padding: 0 2mm; }
+  .hl-sign .side { font-size: 10pt; width: 62mm; }
+  .hl-sign .side .stampbox { height: 36mm; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 2mm; }
+  .hl-sign .side .stampbox img { max-height: 34mm; max-width: 100%; }
+  .hl-sign .side .line { border-top: 1.5px solid #000; margin-bottom: 1.5mm; }
   .hl-sign .side small { font-size: 8.5pt; color: #333; }
 
   /* --- 合約文件版面（合作項目書／主約／附件／簽署欄） --- */
@@ -980,14 +980,15 @@ function renderQuote() {
       <tr><td class="head">關於行銷服務之條款</td></tr>
       <tr><td class="body">${esc($("#q-notes").value)}</td></tr>
     </table>
-    <div class="hl-stamp">${stampSrc() ? `<img src="${stampSrc()}" alt="stamp">` : ""}</div>
     <div class="hl-sign">
       <div class="side">
+        <div class="stampbox">${stampSrc() ? `<img src="${stampSrc()}" alt="stamp">` : ""}</div>
         <div class="line"></div>
         <div><b>${esc(settings.name)}</b></div>
         <small>${esc(settings.nameEn)}</small>
       </div>
       <div class="side">
+        <div class="stampbox"></div>
         <div class="line"></div>
         <div><b>申請單位用印</b></div>
       </div>
