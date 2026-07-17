@@ -338,12 +338,12 @@
         </div>
         <table class="items-table">
           <thead><tr>
-            <th style="width:26%">項目</th><th style="width:14%">每期數量</th>
-            <th style="width:12%">期數</th><th style="width:12%">單位</th><th style="width:19%">單價</th><th></th>
+            <th style="width:32%">項目</th><th style="width:15%">數量</th>
+            <th style="width:14%">單位</th><th style="width:22%">單價</th><th></th>
           </tr></thead>
           <tbody id="q-items"></tbody>
         </table>
-        <p class="hint">金額＝每期數量 × 期數 × 單價；「規格」欄可換行，會完整顯示於報價單。</p>
+        <p class="hint">金額＝數量 × 單價；「規格」欄可換行，會完整顯示於報價單。</p>
       </div>
 
       <div class="section">
@@ -827,13 +827,12 @@ function renderQItemsForm() {
     tr1.innerHTML = `
       <td><input type="text" data-i="${i}" data-k="name" value="${esc(it.name)}" placeholder="項目名稱"></td>
       <td><input type="number" class="num" data-i="${i}" data-k="qty" value="${esc(it.qty)}" min="0" step="1"></td>
-      <td><input type="number" class="num" data-i="${i}" data-k="periods" value="${esc(it.periods || 1)}" min="1" step="1"></td>
       <td><input type="text" data-i="${i}" data-k="unit" value="${esc(it.unit)}"></td>
       <td><input type="number" class="num" data-i="${i}" data-k="price" value="${esc(it.price)}" min="0" step="1"></td>
       <td><button class="del-row" data-del="${i}" title="刪除">✕</button></td>`;
     const tr2 = document.createElement("tr");
     tr2.innerHTML = `
-      <td colspan="5" style="padding-bottom:10px">
+      <td colspan="4" style="padding-bottom:10px">
         <textarea data-i="${i}" data-k="spec" rows="2" placeholder="規格（可換行）"
           style="width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;color:#555;font-family:inherit;resize:vertical">${esc(it.spec)}</textarea>
       </td><td></td>`;
@@ -875,7 +874,7 @@ $("#q-add-item").addEventListener("click", () => qAddItem());
 })();
 
 function quoteCalc() {
-  const sub = qItems.reduce((s, it) => s + (it.qty * (it.periods || 1) * it.price), 0);  // 金額＝每期數量×期數×單價
+  const sub = qItems.reduce((s, it) => s + (it.qty * it.price), 0);  // 金額＝數量×單價
   const discount = parseFloat($("#q-discount").value) || 0;
   const after = Math.max(0, sub - discount);
   const mode = $("#q-tax").value;
@@ -896,13 +895,12 @@ function renderQuote() {
   const rows = qItems.map((it, i) => `
     <tr>
       <td class="c" style="width:8mm">${i + 1}</td>
-      <td class="red" style="width:25mm"><b>${esc(it.name) || "－"}</b></td>
+      <td class="red" style="width:27mm"><b>${esc(it.name) || "－"}</b></td>
       <td class="red spec">${esc(it.spec)}</td>
-      <td class="c red" style="width:12mm">${esc(it.qty)}</td>
-      <td class="c red" style="width:10mm">${esc(it.periods || 1)}</td>
-      <td class="c red" style="width:10mm">${esc(it.unit)}</td>
-      <td class="r val" style="width:18mm">${fmtNum(it.price)}</td>
-      <td class="r val" style="width:20mm">${fmtNum(it.qty * (it.periods || 1) * it.price)}</td>
+      <td class="c red" style="width:13mm">${esc(it.qty)}</td>
+      <td class="c red" style="width:11mm">${esc(it.unit)}</td>
+      <td class="r val" style="width:19mm">${fmtNum(it.price)}</td>
+      <td class="r val" style="width:21mm">${fmtNum(it.qty * it.price)}</td>
     </tr>`).join("");
 
   $("#q-paper1").innerHTML = `
@@ -933,34 +931,34 @@ function renderQuote() {
     </div>
 
     <table class="hl-main" style="margin-bottom:4mm">
-      <tr><td class="title" colspan="8"><u>網路行銷報價單</u></td></tr>
+      <tr><td class="title" colspan="7"><u>網路行銷報價單</u></td></tr>
       <tr>
         <td class="grey" colspan="2">報價單編號</td>
-        <td class="red" colspan="6">${esc($("#q-no").value)}</td>
+        <td class="red" colspan="5">${esc($("#q-no").value)}</td>
       </tr>
       <tr>
         <td class="grey" colspan="2">專案內容</td>
         <td class="red">${esc($("#q-project").value)}</td>
         <td class="grey c" colspan="2">檔期</td>
-        <td class="red c" colspan="3">${esc($("#q-period").value)}</td>
+        <td class="red c" colspan="2">${esc($("#q-period").value)}</td>
       </tr>
       <tr>
         <td class="grey c">編號</td><td class="grey c">項目</td><td class="grey c">規格</td>
-        <td class="grey c">每期數量</td><td class="grey c">期數</td><td class="grey c">單位</td><td class="grey c">單價</td><td class="grey c">金額</td>
+        <td class="grey c">數量</td><td class="grey c">單位</td><td class="grey c">單價</td><td class="grey c">金額</td>
       </tr>
-      ${rows || `<tr><td class="c" colspan="8" style="color:#999;padding:6mm 0">尚未加入報價項目</td></tr>`}
+      ${rows || `<tr><td class="c" colspan="7" style="color:#999;padding:6mm 0">尚未加入報價項目</td></tr>`}
       <tr>
         <td class="grey c" colspan="3">備註</td>
-        <td class="grey r" colspan="3">項目</td>
+        <td class="grey r" colspan="2">項目</td>
         <td class="grey c" colspan="2">金額</td>
       </tr>
       <tr>
         <td class="remark-body" colspan="3" rowspan="4">${esc(remark)}</td>
-        <td class="r" colspan="3">小計</td><td class="sum" colspan="2">${fmtNum(c.sub)}</td>
+        <td class="r" colspan="2">小計</td><td class="sum" colspan="2">${fmtNum(c.sub)}</td>
       </tr>
-      <tr><td class="r" colspan="3">專案優惠價</td><td class="sum" colspan="2">${c.discount > 0 ? "-" + fmtNum(c.discount) : "-"}</td></tr>
-      <tr><td class="r" colspan="3">${taxLabel}</td><td class="sum" colspan="2">${taxCell}</td></tr>
-      <tr class="grand"><td class="r" colspan="3">金額</td><td class="sum" colspan="2">${fmtNum(c.total)}</td></tr>
+      <tr><td class="r" colspan="2">專案優惠價</td><td class="sum" colspan="2">${c.discount > 0 ? "-" + fmtNum(c.discount) : "-"}</td></tr>
+      <tr><td class="r" colspan="2">${taxLabel}</td><td class="sum" colspan="2">${taxCell}</td></tr>
+      <tr class="grand"><td class="r" colspan="2">金額</td><td class="sum" colspan="2">${fmtNum(c.total)}</td></tr>
     </table>
 
     <div class="hl-pay">
